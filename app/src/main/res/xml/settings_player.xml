@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Video Cache"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:key="video_cache_size"
+            android:title="Video Cache Size"
+            android:summary="Configure how much disk space is used for video caching"
+            android:dialogTitle="Select Cache Size"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="clear_cache"
+            android:title="Clear Video Cache"
+            android:summary="Delete all cached video data"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Buffer Settings"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:key="video_buffer_size"
+            android:title="Buffer Size"
+            android:summary="Amount of video to buffer in memory during playback"
+            android:dialogTitle="Select Buffer Size"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:key="video_buffer_length"
+            android:title="Buffer Length"
+            android:summary="How far ahead to buffer during playback"
+            android:dialogTitle="Select Buffer Length"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="About"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:title="TV Video Player"
+            android:summary="Version 1.0.0 — Advanced cache manager with ExoPlayer"
+            app:iconSpaceReserved="false"
+            android:selectable="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
