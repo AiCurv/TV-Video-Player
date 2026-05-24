@@ -23,7 +23,7 @@ class SettingsActivity : AppCompatActivity() {
 
         supportActionBar?.apply {
             title = "Player Settings"
-            setDisplayHomeUpEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
         }
 
         if (savedInstanceState == null) {

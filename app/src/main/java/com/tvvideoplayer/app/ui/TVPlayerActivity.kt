@@ -94,7 +94,7 @@ class TVPlayerActivity : FragmentActivity(), TVVideoPlayer.PlayerListener {
 
     override fun onResume() {
         super.onResume()
-        if (player.getPlaybackState() != TVVideoPlayer.PlaybackState.ENDED) {
+        if (player.getPlaybackState() != androidx.media3.common.Player.STATE_ENDED) {
             player.play()
         }
     }

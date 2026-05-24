@@ -129,7 +129,7 @@ class TVVideoPlayer(private val context: Context) {
                 if (bufferSizeBytes <= 0) {
                     DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES
                 } else {
-                    bufferSizeBytes.toInt().coerceAtMost(Int.MAX_VALUE)
+                    bufferSizeBytes.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
                 }
             )
             .setBackBuffer(30000, true)
@@ -138,7 +138,7 @@ class TVVideoPlayer(private val context: Context) {
                 if (bufferLengthMs <= 0) {
                     DefaultLoadControl.DEFAULT_MAX_BUFFER_MS
                 } else {
-                    bufferLengthMs.toInt()
+                    bufferLengthMs.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
                 },
                 DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
                 DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
