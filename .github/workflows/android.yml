@@ -55,3 +55,66 @@ jobs:
         with:
           name: release-apk
           path: app/build/outputs/apk/release/*.apk
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version info
+        id: version
+        run: |
+          VERSION_NAME=$(grep 'versionName' app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
+          VERSION_CODE=$(grep 'versionCode' app/build.gradle.kts | sed 's/.*= //' | tr -d ' ')
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "tag_name=v$VERSION_NAME" >> $GITHUB_OUTPUT
+
+      - name: Download debug APK
+        uses: actions/download-artifact@v4
+        with:
+          name: debug-apk
+          path: ./apks/
+
+      - name: Download release APK
+        uses: actions/download-artifact@v4
+        with:
+          name: release-apk
+          path: ./apks/
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          MSG=$(git log --oneline -5 --no-merges | sed 's/^/- /')
+          echo "msg<<EOF" >> $GITHUB_OUTPUT
+          echo "$MSG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create or update release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.version.outputs.tag_name }}
+          name: "TV Video Player ${{ steps.version.outputs.version_name }}"
+          body: |
+            ## TV Video Player v${{ steps.version.outputs.version_name }} (build ${{ steps.version.outputs.version_code }})
+
+            ### Recent changes
+            ${{ steps.changelog.outputs.msg }}
+
+            ### Downloads
+            - **debug-apk** — debug build with logging
+            - **release-apk** — release build (smaller, optimized)
+
+            ### Install
+            ```bash
+            adb install app-debug.apk   # or app-release.apk
+            ```
+          artifacts: "./apks/*.apk"
+          artifactContentType: application/vnd.android.package-archive
+          allowUpdates: true
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
